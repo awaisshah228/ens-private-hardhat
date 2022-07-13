@@ -16,13 +16,13 @@ async function main() {
 
   const ens = await ENSRegistry.deploy()
   await ens.deployed()
-  const resolver = await PublicResolver.deploy(ens.address, ZERO_ADDRESS);
+  const resolver = await PublicResolver.deploy(ens.address, ZERO_ADDRESS,ZERO_ADDRESS,ZERO_ADDRESS);
   await resolver.deployed()
   await setupResolver(ens, resolver, accounts)
   const registrar = await  FIFSRegistrar.deploy(ens.address, namehash.hash(tld));
   await registrar.deployed()
   await setupRegistrar(ens, registrar);
-  const reverseRegistrar = await ReverseRegistrar.deploy(ens.address, resolver.address);
+  const reverseRegistrar = await ReverseRegistrar.deploy(ens.address);
   await reverseRegistrar.deployed()
   await setupReverseRegistrar(ens, registrar, reverseRegistrar, accounts);
 };

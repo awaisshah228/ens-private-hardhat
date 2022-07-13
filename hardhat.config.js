@@ -11,11 +11,19 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
-  solidity: "0.8.9",
-  networks: {
-    goerli: {
-      url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-      accounts: [PRIVATE_KEY]
-    }
-  }
+  solidity: {
+    version: "0.8.9",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+    },
+  },
+  // networks: {
+    // goerli: {
+    //   url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
+    //   accounts: [PRIVATE_KEY]
+    // }
+  // }
 };
