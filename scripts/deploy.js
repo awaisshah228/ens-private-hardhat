@@ -16,18 +16,18 @@ async function main() {
 
   const ens = await ENSRegistry.deploy()
   await ens.deployed()
-  console.log(`ENS Registery${ens.address}`)
+  console.log(`ENS Registery: ${ens.address}`)
   const resolver = await PublicResolver.deploy(ens.address, ZERO_ADDRESS,ZERO_ADDRESS,ZERO_ADDRESS);
   await resolver.deployed()
-  console.log(`ENS Resolver${resolver.address}`)
+  console.log(`ENS Resolver: ${resolver.address}`)
   await setupResolver(ens, resolver, accounts)
   const registrar = await  FIFSRegistrar.deploy(ens.address, namehash.hash(tld));
   await registrar.deployed()
-  console.log(`ENS FIFS Registart${registrar.address}`)
+  console.log(`ENS FIFS Registart: ${registrar.address}`)
   await setupRegistrar(ens, registrar);
   const reverseRegistrar = await ReverseRegistrar.deploy(ens.address);
   await reverseRegistrar.deployed()
-  console.log(`ENS ReverseRegistrar${reverseRegistrar.address}`)
+  console.log(`ENS ReverseRegistrar: ${reverseRegistrar.address}`)
   await setupReverseRegistrar(ens, registrar, reverseRegistrar, accounts);
   console.log("done")
 };
