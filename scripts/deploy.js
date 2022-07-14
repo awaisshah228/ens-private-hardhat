@@ -7,24 +7,30 @@ const labelhash = (label) => utils.keccak256(utils.toUtf8Bytes(label))
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ZERO_HASH = "0x0000000000000000000000000000000000000000000000000000000000000000";
 async function main() {
+
+  
   const ENSRegistry = await ethers.getContractFactory("ENSRegistry")
   const FIFSRegistrar = await ethers.getContractFactory("FIFSRegistrar")
   const ReverseRegistrar = await ethers.getContractFactory("ReverseRegistrar")
   const PublicResolver = await ethers.getContractFactory("PublicResolver")
+
   const signers = await ethers.getSigners();
   const accounts = signers.map(s => s.address)
 
   const ens = await ENSRegistry.deploy()
   await ens.deployed()
   console.log(`ENS Registery: ${ens.address}`)
+
   const resolver = await PublicResolver.deploy(ens.address, ZERO_ADDRESS,ZERO_ADDRESS,ZERO_ADDRESS);
   await resolver.deployed()
   console.log(`ENS Resolver: ${resolver.address}`)
   await setupResolver(ens, resolver, accounts)
+
   const registrar = await  FIFSRegistrar.deploy(ens.address, namehash.hash(tld));
   await registrar.deployed()
   console.log(`ENS FIFS Registart: ${registrar.address}`)
   await setupRegistrar(ens, registrar);
+  
   const reverseRegistrar = await ReverseRegistrar.deploy(ens.address);
   await reverseRegistrar.deployed()
   console.log(`ENS ReverseRegistrar: ${reverseRegistrar.address}`)
