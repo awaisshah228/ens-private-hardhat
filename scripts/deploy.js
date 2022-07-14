@@ -8,35 +8,41 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ZERO_HASH = "0x0000000000000000000000000000000000000000000000000000000000000000";
 async function main() {
 
-  
+  // Getting abis
   const ENSRegistry = await ethers.getContractFactory("ENSRegistry")
   const FIFSRegistrar = await ethers.getContractFactory("FIFSRegistrar")
   const ReverseRegistrar = await ethers.getContractFactory("ReverseRegistrar")
   const PublicResolver = await ethers.getContractFactory("PublicResolver")
 
+  // getting accounts
   const signers = await ethers.getSigners();
   const accounts = signers.map(s => s.address)
-
+  
+  // ENS Registery deployed
   const ens = await ENSRegistry.deploy()
   await ens.deployed()
   console.log(`ENS Registery: ${ens.address}`)
 
+ //ENS Resolver Deployed
   const resolver = await PublicResolver.deploy(ens.address, ZERO_ADDRESS,ZERO_ADDRESS,ZERO_ADDRESS);
   await resolver.deployed()
   console.log(`ENS Resolver: ${resolver.address}`)
   await setupResolver(ens, resolver, accounts)
 
+  // ENS Registar Deployed
   const registrar = await  FIFSRegistrar.deploy(ens.address, namehash.hash(tld));
   await registrar.deployed()
   console.log(`ENS FIFS Registart: ${registrar.address}`)
   await setupRegistrar(ens, registrar);
   
+  //ENS Reverse Registrar Deployed
   const reverseRegistrar = await ReverseRegistrar.deploy(ens.address);
   await reverseRegistrar.deployed()
   console.log(`ENS ReverseRegistrar: ${reverseRegistrar.address}`)
   await setupReverseRegistrar(ens, registrar, reverseRegistrar, accounts);
   console.log("done")
 };
+
 
 async function setupResolver(ens, resolver, accounts) {
   const resolverNode = namehash.hash("resolver");
